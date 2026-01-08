@@ -1,4 +1,15 @@
  <html>
+     <head>
+         <style>
+             table{ border : 1px solid black;}
+             tr td{
+                 border : 1px solid black;
+                 border-collapse:collapse;
+                }
+
+         </style>
+     </head>
+     <body>
     <table>
         <tr>
             <td>Date</td>
@@ -15,8 +26,18 @@
         $sql="select * from log";
         $req=$connexion->query($sql);
         while($d=$req->fetch(PDO::FETCH_ASSOC)){
-            
+            echo "<tr>
+                  <td>" . $d['date'] . "</td>
+                  <td>" . $d['heur'] . "</td>
+                  <td>" . $d['num_carte'] . "</td>
+                  <td>" . $d['componant'] . "</td>
+                  <td>" . $d['expected'] . "</td>
+                  <td>" . $d['actual'] . "</td>
+                  <td>" . $d['low'] . "</td>
+                  <td>" . $d['high'] . "</td>
+                  </tr>";
         }
          ?> 
     </table>
+    </body>
  </html>
