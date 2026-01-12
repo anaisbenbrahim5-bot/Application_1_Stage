@@ -4,8 +4,7 @@
              table{ border : 1px solid black;}
              tr td{
                  border : 1px solid black;
-                 border-collapse:collapse;
-                }
+             }
 
          </style>
      </head>
