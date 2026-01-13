@@ -19,18 +19,18 @@ if(isset($_FILES['logs'])){
     else{
         echo "<p> no </p>";
     }*/
-    $chunks=array_chunk($_FILES['logs']['tmp_name'],100);
+    $chunks=array_chunk($_FILES['logs']['tmp_name'],500);
     foreach ($chunks as $chunk) {
         $nblogs=count($chunk);
         //echo "<p> $nblogs </p>";
         for($j=0;$j<$nblogs;$j++){
+            //echo "<p> $num </p>";
             $log=file_get_contents($chunk[$j]);
+            $num=null;
             $lignes=explode("\n",$log);
             for($i=0;$i<count($lignes) - 1;$i++){
-                if(str_contains($lignes[$i],"SN")){
-                    $num=substr($lignes[$i],strpos($lignes[$i],"SN")+2);
-                    settype($num,"int");
-                    //echo "<p> $num </p>";
+                if (preg_match('/SN\s+(\d+)/', $lignes[$i], $matches)) {
+                    $num = $matches[1];
                 }
                 $ligne3=$lignes[$i];
                     if(str_contains($ligne3,"[")){
@@ -104,10 +104,8 @@ if(isset($_FILES['logs'])){
                 }
                     //echo "<p> $actual </p>";
                     $dates= $date->format('Y-m-d');
-                    $sql2="Delete from log where date ='$dates' and heur ='$heure' and num_carte='$num' and componant='$component' and expected='$expect' and actual='$actual' and low='$low' and high='$high'";
-                    $s = $connexion->exec($sql2);
-                    $stm = $connexion->prepare("INSERT INTO log (date , heur ,num_carte,componant,expected,actual,low,high)  VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)");
-                    $stm->execute(array($date->format('Y-m-d'),$heure,$num,$component,$expect,$actual,$low,$high));
+                    $stm = $connexion->prepare("INSERT IGNORE  INTO log (date, heure, num_carte, component, expected, actual, low, high)VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                    $stm->execute([$dates,$heure,$num,$component,$expect,$actual,$low,$high]);
             }
         }
     }

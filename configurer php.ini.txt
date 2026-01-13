@@ -1,0 +1,13 @@
+Pour accéder au fichier php.ini via le XAMPP Control Panel, il suffit de cliquer sur le bouton Config à côté d’Apache, puis de sélectionner PHP (php.ini).
+Une fois le fichier ouvert, il faut modifier les valeurs des lignes suivantes :
+max_execution_time = 0 // Temps maximum d'exécution de chaque script
+max_input_time = 0 // Temps maximum pour analyser les données de requête
+post_max_size = 0 // Taille maximale des données POST acceptées
+upload_max_filesize = 0 // Taille maximale des fichiers uploadés
+max_file_uploads = 10000 // Nombre maximal de fichiers uploadés par requête
+memory_limit = -1 // Quantité maximale de mémoire qu’un script peut utiliser
+max_input_vars = 10000 // Nombre maximal de variables GET/POST/COOKIE acceptées
+Si une ligne est commentée (avec un ; au début), il faut retirer le point-virgule, car cela signifie que la ligne est désactivée.
+après avoir effectué ces modifications,
+il est important d’enregistrer le fichier php.ini,
+puis de redémarrer Apache et MySQL depuis le XAMPP Control Panel afin que les changements prennent effet.
