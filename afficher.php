@@ -27,7 +27,7 @@
         while($d=$req->fetch(PDO::FETCH_ASSOC)){
             echo "<tr>
                   <td>" . $d['date'] . "</td>
-                  <td>" . $d['heure'] . "</td>
+                  <td>" . $d['hour'] . "</td>
                   <td>" . $d['num_carte'] . "</td>
                   <td>" . $d['component'] . "</td>
                   <td>" . $d['expected'] . "</td>
