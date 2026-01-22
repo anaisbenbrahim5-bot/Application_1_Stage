@@ -104,7 +104,7 @@ if(isset($_FILES['logs'])){
                 }
                     //echo "<p> $actual </p>";
                     $dates= $date->format('Y-m-d');
-                    $stm = $connexion->prepare("INSERT IGNORE  INTO log (date, heure, num_carte, component, expected, actual, low, high)VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                    $stm = $connexion->prepare("INSERT IGNORE  INTO log (date, hour, num_carte, component, expected, actual, low, high)VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
                     $stm->execute([$dates,$heure,$num,$component,$expect,$actual,$low,$high]);
             }
         }
