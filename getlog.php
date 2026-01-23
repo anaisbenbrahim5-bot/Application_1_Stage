@@ -2,11 +2,18 @@
 header("Access-Control-Allow-Origin: *"); //laisse  l'accées au angular
 header("Content-Type: application/json"); //le contenu devient on json qui etait en texte
 include("connexion.php");
-$sql="SELECT * FROM log";
-$req=$connexion->query($sql);
-$data=[];
-while($row=$req->fetch(PDO::FETCH_ASSOC)){
-    $data[]=$row;
-}
-echo json_encode($data);
+$num = $_GET['num_carte'] ?? '';
+
+$sql = "
+    SELECT date, hour, num_carte, component, expected, actual, low, high
+    FROM log
+    WHERE num_carte LIKE ?
+    ORDER BY date DESC, hour DESC
+    LIMIT 500
+";
+
+$stmt = $connexion->prepare($sql);
+$stmt->execute(['%' . $num . '%']);
+echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+
 ?>
