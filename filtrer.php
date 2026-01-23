@@ -1,31 +1,14 @@
 <?php
 include("connexion.php");
-?>
-<!DOCTYPE html>
-<html>
-    <head></head>
-    <body>
-    <form action="" method="post" enctype="multipart/form-data">
-        <input type="file"  name="logs[]" webkitdirectory directory multiple >
-        <input type="submit">
-    </form>
-    </body>
-</html>
-<?php
 if(isset($_FILES['logs'])){
-    /*if(is_array($_FILES['logs']['name'])){
-        echo "<p> yes </p>";
-    }
-    else{
-        echo "<p> no </p>";
-    }*/
-    $chunks=array_chunk($_FILES['logs']['tmp_name'],500);
-    foreach ($chunks as $chunk) {
-        $nblogs=count($chunk);
-        //echo "<p> $nblogs </p>";
-        for($j=0;$j<$nblogs;$j++){
-            //echo "<p> $num </p>";
-            $log=file_get_contents($chunk[$j]);
+        /*if(is_array($_FILES['logs']['name'])){
+            echo "<p> yes </p>";
+        }
+        else{
+            echo "<p> no </p>";
+        }*/
+        foreach ($_FILES['logs']['tmp_name'] as $j => $tmpFile) {
+            $log=file_get_contents($tmpFile);
             $num=null;
             $lignes=explode("\n",$log);
             for($i=0;$i<count($lignes) - 1;$i++){
@@ -37,7 +20,7 @@ if(isset($_FILES['logs'])){
                         //echo "<p> $ligne3 </p>";
                         $datech=substr($ligne3,strpos($ligne3,"[")+1,strpos($ligne3," ")-strpos($ligne3,"[")-1);
                         //echo "<p> $datech </p>";
-                       $date = DateTime::createFromFormat('d-M-y', $datech);
+                        $date = DateTime::createFromFormat('d-M-y', $datech);
                         //echo "<p> $date </p>";
                         $heure=trim(substr($ligne3,strpos($ligne3," ")));
                         //echo "<p> $heure </p>";
@@ -110,5 +93,42 @@ if(isset($_FILES['logs'])){
         }
     }
 }
-}
 ?>
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+    <form action="" method="post" id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="logs"  name="logs[]" webkitdirectory directory multiple >
+        <input type="submit" onclick="startUpload()">
+    </form>
+    <script>
+const BATCH_SIZE = 500; 
+
+async function startUpload() {
+    const files = document.getElementById('logs').files;
+    if (!files.length) return;
+
+    const totalBatches = Math.ceil(files.length / BATCH_SIZE);
+
+    for (let i = 0; i < files.length; i += BATCH_SIZE) {
+        const formData = new FormData();
+        for (let j = i; j < i + BATCH_SIZE && j < files.length; j++) {
+            formData.append('logs[]', files[j]);
+        }
+        const res = await fetch(window.location.href, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!res.ok) {
+            alert('Upload failed at batch ' + (i / BATCH_SIZE + 1));
+            return;
+        }
+    }
+
+    alert('Upload completed successfully ');
+}
+</script>
+    </body>
+</html>

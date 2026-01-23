@@ -35,7 +35,7 @@
                   <td>" . $d['actual'] . "</td>
                   <td>" . $d['low'] . "</td>
                   <td>" . $d['high'] . "</td>
-                  <td>" .$d['problem'] . "</td>
+                  <td>" .$d['Problem'] . "</td>
                   </tr>";
         }
          ?> 
